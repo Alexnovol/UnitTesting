@@ -4,6 +4,7 @@ import exercise.article.Article;
 import exercise.article.Library;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -35,10 +36,12 @@ public class WorkerImpl implements Worker {
 
     @Override
     public List<Article> prepareArticles(List<Article> articles) {
-        List<Article> result = articles
+        List<Article> result = new ArrayList<>(articles
                 .stream()
                 .filter(this::isArticleCorrect)
-                .toList();
+                // добавляю удаление статей с одинаковым названием
+                .collect(Collectors.toMap(Article::getTitle, article -> article,
+                        (art1, art2) -> art1)).values());
         result.forEach(this::prepareDate);
         return result;
     }

@@ -48,6 +48,8 @@ public class LibraryImpl implements Library {
     @Override
     public void store(int year, List<Article> articles) {
         System.out.println("Сохраняем новые статьи");
+        System.out.println(articles);
+        System.out.println(year);
         tempStorage.merge(year, articles, (oldList, newList) -> {
             oldList.addAll(newList);
             return oldList;
