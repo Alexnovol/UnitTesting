@@ -3,9 +3,11 @@ package exercise.article;
 
 import exercise.worker.WorkerImpl;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
+import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
@@ -15,17 +17,18 @@ import java.util.Arrays;
 import java.util.List;
 
 class WorkerImplTest {
+    @InjectMocks
     private WorkerImpl worker;
     @Mock
-    LibraryImpl library;
+    private LibraryImpl library;
 
     @BeforeEach
     public void setUp() {
         MockitoAnnotations.initMocks(this);
-        worker = new WorkerImpl(library);
     }
 
     @Test
+    @DisplayName("Проверка, что метод getCatalog возвращает все названия статей")
     public void getCatalogShouldReturnAllTitles() {
         Mockito.when(library.getAllTitles()).thenReturn((Arrays.asList("Статья1",
                 "Статья2", "Статья3")));
@@ -37,6 +40,7 @@ class WorkerImplTest {
     }
 
     @Test
+    @DisplayName("Проверка, что метод getCatalog сортирует названия статей")
     public void getCatalogShouldSortTitles() {
         Mockito.when(library.getAllTitles()).thenReturn((
                 Arrays.asList("Сколько времени нужно, чтобы выучить Java",
@@ -50,6 +54,7 @@ class WorkerImplTest {
     }
 
     @Test
+    @DisplayName("Проверка, что метод prepareArticles не изменяет корректный список")
     public void prepareArticlesShouldReturnCorrectList() {
         List<Article> articleList = Arrays.asList(new Article("Название1",
                 "Контент1", "Автор1", LocalDate.of(2024, 4, 15)),
@@ -59,6 +64,7 @@ class WorkerImplTest {
     }
 
     @Test
+    @DisplayName("Проверка, что метод prepareArticles удаляет статьи без названия")
     public void prepareArticlesShouldDeleteArticlesWithoutTitle() {
         List<Article> articleList = Arrays.asList(new Article(null,
                         "Контент1", "Автор1", LocalDate.of(2024, 4, 15)),
@@ -70,6 +76,7 @@ class WorkerImplTest {
     }
 
     @Test
+    @DisplayName("Проверка, что метод prepareArticles удаляет статьи без контента")
     public void prepareArticlesShouldDeleteArticlesWithoutContent() {
         List<Article> articleList = Arrays.asList(new Article("Название1",
                         null, "Автор1", LocalDate.of(2024, 4, 15)),
@@ -81,6 +88,7 @@ class WorkerImplTest {
     }
 
     @Test
+    @DisplayName("Проверка, что метод prepareArticles удаляет статьи без автора")
     public void prepareArticlesShouldDeleteArticlesWithoutAuthor() {
         List<Article> articleList = Arrays.asList(new Article("Название1",
                         "Контент1", null, LocalDate.of(2024, 4, 15)),
@@ -92,6 +100,7 @@ class WorkerImplTest {
     }
 
     @Test
+    @DisplayName("Проверка, что метод prepareArticles устанавливает текущую дату, если дата отсутствует")
     public void prepareArticlesShouldCheckDate() {
         List<Article> articleList = Arrays.asList(new Article("Название1",
                         "Контент1", "Автор1", LocalDate.of(2024, 4, 15)),
@@ -106,6 +115,7 @@ class WorkerImplTest {
     }
 
     @Test
+    @DisplayName("Проверка, что метод prepareArticles удаляет дубликаты статей с повторяющимися названиями")
     public void prepareArticlesShouldRemoveArticlesWithDublTitles() {
         List<Article> articleList = Arrays.asList(new Article("Название1",
                         "Контент1", "Автор1", LocalDate.of(2024, 4, 15)),
@@ -116,6 +126,7 @@ class WorkerImplTest {
     }
 
     @Test
+    @DisplayName("Проверка, что метод addNewArticles сохраняет статьи в библиотеке")
     public void addNewArticlesShouldSaveArticles() {
         List<Article> articleList = Arrays.asList(new Article("Название1",
                         "Контент1", "Автор1", LocalDate.of(2024, 4, 15)),
@@ -126,6 +137,7 @@ class WorkerImplTest {
     }
 
     @Test
+    @DisplayName("Проверка, что метод addNewArticles обновляет каталог только после сохранения")
     public void addNewArticlesShouldUpdateDirAfterSaving() {
         List<Article> articleList = Arrays.asList(new Article("Название1",
                         "Контент1", "Автор1", LocalDate.of(2024, 4, 15)),
@@ -137,6 +149,7 @@ class WorkerImplTest {
     }
 
     @Test
+    @DisplayName("Проверка, что метод addNewArticles не обновляет каталог, если сохраненных статей нет")
     public void addNewArticlesShouldNotUpdateDirWithoutSaving() {
         List<Article> articleList = Arrays.asList(new Article(null,
                         "Контент1", "Автор1", LocalDate.of(2024, 4, 15)));
@@ -145,6 +158,7 @@ class WorkerImplTest {
     }
 
     @Test
+    @DisplayName("Проверка, что метод addNewArticles производит сортировку статей по годам")
     public void addNewArticlesShouldSortArticles() {
         List<Article> articleList = Arrays.asList(new Article("Название1",
                         "Контент1", "Автор1", LocalDate.of(2023, 4, 15)),
